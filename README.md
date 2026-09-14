@@ -1,249 +1,220 @@
-# [Le Royaume de Maxremi]
+# 🧙‍♂️ Le Royaume de Maxremi
 
-## 🧙‍♂️ Backend de jeu RPG utilisant l'API de DND 5e édition.
+> API de jeu de rôle façon Donjons & Dragons — création de personnages, gestion de monstres/objets/quêtes et système de rôles Joueur / Maître du Jeu, connectée à l'API SRD de D&D 5e.
 
-## 🚀 Technologies utilisées
+![Node.js](https://img.shields.io/badge/Node.js-backend-339933?logo=nodedotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Express](https://img.shields.io/badge/Express-API-000000?logo=express)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)
+![Neon](https://img.shields.io/badge/Neon-PostgreSQL-00E599?logo=postgresql&logoColor=white)
+![React](https://img.shields.io/badge/React-frontend-61DAFB?logo=react&logoColor=black)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-styling-06B6D4?logo=tailwindcss&logoColor=white)
+![JWT](https://img.shields.io/badge/Auth-JWT-black?logo=jsonwebtokens)
+<br>
 
-    - Node
-    - Typescript
-    - Express
-    - Prisma + Neon
-    - Axios
-    - JWT + bcrypt
-    - Cors
-    - React
-    - TailwindCSS
+## 📸 Aperçu
 
-## 🛠️ Prérequis
+<table>
+<tr>
+<td width="50%">
 
-Vous devez avoir:
+**Page d'accueil**
+![Accueil](./documentation/images/image.png)
 
+</td>
+<td width="50%">
+
+**Affichage public des monstres**
+![Monstres](./documentation/images/image-11.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Création de personnage**
+![Création de personnage](./documentation/images/image-5.png)
+
+</td>
+<td width="50%">
+
+**Panneau d'administration — quêtes**
+![Admin quêtes](./documentation/images/image-25.png)
+
+</td>
+</tr>
+</table>
+
+<br>
+
+## 🖼️ Fonctionnalités en images
+
+### 🐉 Bestiaire filtrable
+Recherche et filtres par type (Dragon, Orc...), taille et alignement.
+
+<p>
+<img src="./documentation/images/image-10.png" width="32%" />
+<img src="./documentation/images/image-12.png" width="32%" />
+<img src="./documentation/images/image-14.png" width="32%" />
+</p>
+
+### 🛡️ Objets et boutique
+Affichage public avec filtres (type d'arme, rareté, tri par prix).
+
+<p>
+<img src="./documentation/images/image-16.png" width="32%" />
+<img src="./documentation/images/image-17.png" width="32%" />
+<img src="./documentation/images/image-18.png" width="32%" />
+</p>
+
+### 🔐 Authentification & administration
+Inscription, connexion et gestion des utilisateurs par le MDJ.
+
+<p>
+<img src="./documentation/images/image-1.png" width="32%" />
+<img src="./documentation/images/image-19.png" width="32%" />
+<img src="./documentation/images/image-21.png" width="32%" />
+</p>
+
+### ⚔️ Recherche de monstres via l'API D&D 5e
+Le MDJ peut chercher un monstre directement dans le SRD officiel et l'ajouter au bestiaire.
+
+<p>
+<img src="./documentation/images/image-32.png" width="49%" />
+<img src="./documentation/images/image-34.png" width="49%" />
+</p>
+
+<br>
+
+## 🛠️ Stack technique
+
+| Couche | Technologie |
+|---|---|
+| Backend | Node.js, Express, TypeScript |
+| Base de données | PostgreSQL (Neon) via Prisma ORM |
+| Authentification | JWT + bcrypt |
+| Requêtes externes | Axios (API SRD D&D 5e) |
+| Frontend | React, TailwindCSS |
+| API tierce | [dnd5eapi.co](https://www.dnd5eapi.co/) |
+
+<br>
+
+## 🚀 Installation et lancement
+
+**Prérequis**
 - Node.js
-- Une instance de base de données Neon (neon.com), c'est gratuit.
+- Une instance de base de données Neon (gratuit sur [neon.com](https://neon.com))
+
+### Backend
+
+```bash
+git clone https://github.com/clementlaflamme/royaume-maxremi.git
+cd royaume-maxremi/backend
+npm install
 
-## ⚙️ Installation et Configuration:
+# Créer un fichier .env à la racine du backend (voir .env.example)
+# et y ajouter le lien de connexion Neon
 
-    git clone https://github.com/powemetal/royaume-maxremi.git
+npx prisma generate
+npx prisma migrate dev --name init
 
-    cd royaume-maxremi/backend
+npm run dev
+```
 
-Installer les dépendances:
+### Frontend
 
-    npm install
+```bash
+# Dans un nouveau terminal
+cd royaume-maxremi/frontend
+npm install
+npm run dev
+```
 
-Configuration des variables d'environnement :
+L'interface est ensuite disponible sur `http://localhost:5173`.
 
-    Crée un fichier .env à la racine du backend du projet et ajouter le lien vers Neon.
+<br>
 
-    Voir .env.example.
+## 🛣️ Routes de l'API
 
-Initialiser Prisma (Base de données) :
+<details>
+<summary>Voir la liste complète des routes (cliquer pour développer)</summary>
 
-Générer le client Prisma et lancer les migrations pour créer les tables:
+> L'adresse de base pour toutes les requêtes est `http://localhost:3000`. Certaines routes nécessitent un token JWT dans l'en-tête `Authorization`.
 
-    npx prisma generate
-    npx prisma migrate dev --name init
+### Authentification
 
-Lancer le serveur:
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `POST` | `/auth/register` | Création de compte (Utilisateur ou Admin) | Public |
+| `POST` | `/auth/login` | Connexion et obtention du token JWT | Public |
+| `GET` | `/auth/me` | Infos de l'utilisateur connecté | Authentifié |
 
-    npm run dev
+### Monstres
 
-Installer les dependances du frontend
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `GET` | `/monstre/` | Liste tous les monstres | Public |
+| `GET` | `/monstre/:nom` | Détail d'un monstre par son nom | Public |
+| `POST` | `/monstre/ajouter/:nom` | Ajoute un nouveau monstre | MDJ |
+| `PATCH` | `/monstre/:id` | Modifie un monstre existant | MDJ |
+| `DELETE` | `/monstre/supprimer/:id` | Supprime un monstre | MDJ |
+| `GET` | `/recherche/:nom` | Recherche un monstre dans l'API D&D | MDJ |
 
-    ouvrir un nouveau terminal au dossier: royaume-maxremi/frontend
-    npm install
+### Objets
 
-Lancer le serveur frontend
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `GET` | `/objet/` | Liste tous les objets | Public |
+| `GET` | `/objet/:nom` | Détail d'un objet par son nom | Public |
+| `POST` | `/objet/creer` | Crée un nouvel objet | MDJ |
+| `PATCH` | `/objet/:id` | Modifie un objet existant | MDJ |
+| `DELETE` | `/objet/supprimer/:id` | Supprime un objet | MDJ |
 
-    npm run dev
+### Quêtes
 
-Ouvrir une fenêtre du navigateur
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `GET` | `/quete` | Liste les quêtes (filtre `?difficulte=X`) | Public |
+| `GET` | `/quete/:nom` | Détail d'une quête par son nom | Public |
+| `POST` | `/quete/creer` | Crée une nouvelle quête | MDJ |
+| `PATCH` | `/quete/:id` | Modifie une quête existante | MDJ |
+| `DELETE` | `/quete/supprimer/:id` | Supprime une quête | MDJ |
 
-    http://localhost:5173/
+### Utilisateurs & personnages
 
-## 🌐 Services externes
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `POST` | `/utilisateur/creer` | Crée un compte utilisateur | MDJ |
+| `GET` | `/utilisateur/recuperer/:id` | Récupère les infos utilisateur | MDJ |
+| `PATCH` | `/utilisateur/modifier/:id` | Modifie un utilisateur | MDJ |
+| `DELETE` | `/utilisateur/supprimer/:id` | Supprime un utilisateur | MDJ |
+| `POST` | `/personnage/creer` | Crée un personnage | Joueur |
+| `GET` | `/personnage/recuperer/:id` | Affiche le personnage | Joueur |
+| `PATCH` | `/personnage/modifier/:id` | Modifie un personnage | MDJ |
+| `DELETE` | `/personnage/supprimer/:id` | Supprime un personnage | Joueur |
 
-    DND 5e SRD API : https://www.dnd5eapi.co/
+### Journal de quêtes & inventaire
 
-## 🛣️ Liste des routes:
+| Méthode | Route | Description | Accès |
+|---|---|---|---|
+| `POST` | `/persoquete/ajouter` | Ajoute une quête au journal du perso | Joueur |
+| `GET` | `/persoquete/:idPerso` | Affiche le journal de quêtes | Joueur |
+| `PATCH` | `/persoquete/journal/reussir/:id` | Valide une quête | Joueur |
+| `PATCH` | `/persoquete/journal/echouer/:id` | Échoue une quête | Joueur |
+| `DELETE` | `/persoquete/journal/abandonner/:id` | Abandonne une quête | Joueur |
+| `GET` | `/inventaire/:idPerso` | Récupère l'inventaire | Joueur |
+| `POST` | `/inventaire/ajouter` | Ajoute un objet à l'inventaire | Joueur |
+| `DELETE` | `/inventaire/retirer` | Retire un objet de l'inventaire | Joueur |
 
-Routes
+**Tests** : le fichier `test.rest` à la racine du backend permet de tester chaque route individuellement (nécessite de renseigner des UUID valides pour `@uuidPerso`, `@uuidQuete`, `@uuidPersoQuete`, `@uuidUser`).
 
-> **Note :** L'adresse de base pour toutes les requêtes est `http://localhost:3000`. Certaines routes nécessitent un token d'authentification (`Bearer token`) dans l'en-tête `Authorization`.
+</details>
 
----
+<br>
 
-### 1. Authentification
-
-| Méthode | Route             | Description                                  | Accès       |
-| :------ | :---------------- | :------------------------------------------- | :---------- |
-| `POST`  | `/auth/register`  | Création de compte (Utilisateur ou Admin)    | Public      |
-| `POST`  | `/auth/login`     | Connexion et obtention du token JWT          | Public      |
-| `GET`   | `/auth/me`        | Récupère les infos de l'utilisateur connecté | Authentifié |
-
----
-
-### 2. Monstres
-
-| Méthode  | Route                     | Description                     | Accès  |
-| :------- | :------------------------ | :------------------------------ | :----- |
-| `GET`    | `/monstre/`               | Liste tous les monstres         | Public |
-| `GET`    | `/monstre/:nom`           | Détail d'un monstre par son nom | Public |
-| `POST`   | `/monstre/ajouter/:nom`   | Ajoute un nouveau monstre       | MDJ    |
-| `PATCH`  | `/monstre/:id`           | Modifie un monstre existant     | MDJ    |
-| `DELETE` | `/monstre/supprimer/:id` | Supprime un monstre             | MDJ    |
-| `GET`    | `/recherche/:nom`        | Recherche un monstre dans l'api | MDJ    |
-
----
-
-### 3. Objets
-
-| Méthode  | Route                   | Description                   | Accès  |
-| :------- | :---------------------- | :---------------------------- | :----- |
-| `GET`    | `/objet/`               | Liste tous les objets         | Public |
-| `GET`    | `/objet/:nom`           | Détail d'un objet par son nom | Public |
-| `POST`   | `/objet/creer`          | Crée un nouvel objet          | MDJ    |
-| `PATCH`  | `/objet/:id`           | Modifie un objet existant     | MDJ    |
-| `DELETE` | `/objet/supprimer/:id` | Supprime un objet             | MDJ    |
-
----
-
-### 4. Quêtes
-
-| Méthode  | Route                   | Description                                            | Accès  |
-| :------- | :---------------------- | :----------------------------------------------------- | :----- |
-| `GET`    | `/quete`                | Liste les quêtes (filtre par `?difficulte=X` possible) | Public |
-| `GET`    | `/quete/:nom`           | Détail d'une quête par son nom                         | Public |
-| `POST`   | `/quete/creer`          | Crée une nouvelle quête                                | MDJ    |
-| `PATCH`  | `/quete/:id`           | Modifie une quête existante                            | MDJ    |
-| `DELETE` | `/quete/supprimer/:id` | Supprime une quête                                     | MDJ    |
-
----
-
-### 5. Utilisateurs & Personnages
-
-| Méthode  | Route                        | Description                    | Accès  |
-| :------- | :--------------------------- | :----------------------------- | :----- |
-| `POST`   | `/utilisateur/creer`         | Crée un compte utilisateur     | MDJ    |
-| `GET`    | `/utilisateur/recuperer/:id` | Récupère les infos utilisateur | MDJ    |
-| `PATCH`  | `/utilisateur/modifier/:id`  | Modifie un utilisateur         | MDJ    |
-| `DELETE` | `/utilisateur/supprimer/:id` | Supprime un utilisateur        | MDJ    |
-| `POST`   | `/personnage/creer`          | Crée un personnage             | Joueur |
-| `GET`    | `/personnage/recuperer/:id`  | Affiche le personnage          | Joueur |
-| `PATCH`  | `/personnage/modifier/:id`   | Modifie un personnage          | MDJ    |
-| `DELETE` | `/personnage/supprimer/:id`  | Supprime un personnage         | Joueur |
-
----
-
-### 6. Journal de Quêtes & Inventaire
-
-| Méthode  | Route                                | Description                          | Accès  |
-| :------- | :----------------------------------- | :----------------------------------- | :----- |
-| `POST`   | `/persoquete/ajouter`                | Ajoute une quête au journal du perso | Joueur |
-| `GET`    | `/persoquete/:idPerso`               | Affiche le journal de quêtes         | Joueur |
-| `PATCH`  | `/persoquete/journal/reussir/:id`    | Valide une quête                     | Joueur |
-| `PATCH`  | `/persoquete/journal/echouer/:id`    | Échoue une quête                     | Joueur |
-| `DELETE` | `/persoquete/journal/abandonner/:id` | Abandonne une quête                  | Joueur |
-| `GET`    | `/inventaire/:idPerso`               | Récupère l'inventaire                | Joueur |
-| `POST`   | `/inventaire/ajouter`                | Ajoute un objet à l'inventaire       | Joueur |
-| `DELETE` | `/inventaire/retirer`                | Retire un objet de l'inventaire      | Joueur |
-
-## Collection de tests
-
-### Utiliser le fichier tests.rest
-
-Il est possible de tester les routes individuellement à partir du fichier test.rest. Notez que certains tests nécessitent d'affecter des UUID aux variables `@uuidPerso`, `@uuidQuete`, `@uuidPersoQuete`, `@uuidUser`. Ces UUID doivent être valides dans votre base de données.
-
-Pour lancer des tests à partir de test.rest:
-
-    - Assurez-vous d'avoir lancé le serveur backend
-    - Exécutez des requêtes à partir du fichier test.rest en cliquant
-
-# Demo
-
-## Page d'accueil
-![alt text](documentation/images/image.png)
-
-## Inscription
-![alt text](documentation/images/image-1.png)
-
-## Connexion
-![alt text](documentation/images/image-2.png)
-![alt text](documentation/images/image-3.png)
-
-## Creation de personnage
-![alt text](documentation/images/image-5.png)
-![alt text](documentation/images/image-6.png)
-![alt text](documentation/images/image-7.png)
-
-## Suppression de personnage
-![alt text](documentation/images/image-8.png)
-![alt text](documentation/images/image-9.png)
-
-## Affichage publique des Monstres
-![alt text](documentation/images/image-11.png)
-
-## Filtres:
-### Dragon
-![alt text](documentation/images/image-10.png)
-### Très Petit
-![alt text](documentation/images/image-12.png)
-### Orc
-![alt text](documentation/images/image-13.png)
-### Alignement
-![alt text](documentation/images/image-14.png)
-
-### Affichage publique des objets:
-![alt text](documentation/images/image-15.png)
-
-## Filtres:
-### Arme
-![alt text](documentation/images/image-16.png)
-### Rarete
-![alt text](documentation/images/image-17.png)
-### Prix decroissant
-![alt text](documentation/images/image-18.png)
-
-
-## Administration:
-### Connexion:
-![alt text](documentation/images/image-19.png)
-![alt text](documentation/images/image-20.png)
-
-## Admin utilisateurs:
-![alt text](documentation/images/image-21.png)
-### Recherche
-![alt text](documentation/images/image-22.png)
-### Suppression du compte
-![alt text](documentation/images/image-23.png)
-![alt text](documentation/images/image-24.png)
-
-
-## Admin quetes:
-### Ajouter une quete
-![alt text](documentation/images/image-25.png)
-![alt text](documentation/images/image-26.png)
-![alt text](documentation/images/image-27.png)
-![alt text](documentation/images/image-28.png)
-
-### Mofidier une quete:
-![alt text](documentation/images/image-29.png)
-![alt text](documentation/images/image-30.png)
-![alt text](documentation/images/image-31.png)
-
-
-## Admin Monstres:
-### Recherche de monstres dans l'api DND pour les ajouter
-![alt text](documentation/images/image-32.png)
-![alt text](documentation/images/image-33.png)
-### Modifier un monstre:
-![alt text](documentation/images/image-34.png)
-![alt text](documentation/images/image-35.png)
-![alt text](documentation/images/image-36.png)
-![alt text](documentation/images/image-37.png)
 ## 👤 Auteurs
 
-    Clément Laflamme
-    Francis Boisvert
-    Mathieu Gosselin
-    Pascale Mercier (TP1)
+- Clément Laflamme
+- Francis Boisvert
+- Mathieu Gosselin
+- Pascale Mercier *(TP1)*
